@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>Web App Skeleton v 0.3</title>
+	<link href="static/css/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+	
+	<header>
+		<h1 data-bind><span>Tournament: </span>Amsterdam Ultimate Autumn</h1>
+	</header>
+        <nav>
+            <ol>
+                <li><a href="#game">game</a></li>
+				<li><a href="#schedule">schedule</a></li>
+				<li><a href="#ranking">ranking</a></li>
+			</ol>
+        </nav>
+
+        <section>
+            <header id="heading"><h1 data-bind="headingContent"></h1></header>
+            <table id="game">
+            	<thead>
+            		<tr>
+	            		<th>Score</th>
+	                    <th>Team</th>
+	                    <th>Points</th>
+	                    <th>Team</th>
+	                    <th>Points</th>
+                	</tr>
+            	</thead>
+            	<tbody id="game-data">
+					<tr>
+						<td data-bind="score"></td>
+						<td data-bind="team1"></td>
+						<td data-bind="team1Score"></td>
+						<td data-bind="team2"></td>
+						<td data-bind="team2Score"></td>
+					</tr>
+            	</tbody>
+            </table>
+
+            <table id="schedule">
+            	<thead>
+            		<tr>
+	            		<th>ate</th>
+	                    <th>Team</th>
+	                    <th>Points</th>
+	                    <th>Team</th>
+	                    <th>Points</th>
+                	</tr>
+            	</thead>
+            	<tbody id="schedule-data">
+					<tr>
+						<td data-bind="date"></td>
+						<td data-bind="team1"></td>
+						<td data-bind="team1ate"></td>
+						<td data-bind="team2"></td>
+						<td data-bind="team2Score"></td>
+					</tr>
+            	</tbody>
+            </table>
+
+            <table id="ranking">
+            	<thead>
+            		<tr>
+	            		<th>Win</th>
+	                    <th>Lost</th>
+	                    <th>Sw</th>
+	                    <th>Sl</th>
+	                    <th>Pl</th>
+                	</tr>
+            	</thead>
+            	
+            	<tbody id="ranking-data">
+					<tr>
+						<td data-bind="team"></td>
+						<td data-bind="Win"></td>
+						<td data-bind="Lost"></td>
+						<td data-bind="Sw"></td>
+						<td data-bind="Sl"></td>
+						<td data-bind="Pl"></td>
+					</tr>
+            	</tbody>
+            </table>
+
+        </section>
+
+
+	<!-- Application -->
+	<script src="static/js/transparency.min.js"></script>
+	<script src="static/js/routie.min.js"></script>
+	<script src="static/js/app.js"></script>
+	
+</body>
+</html>
