@@ -9,7 +9,7 @@ var SCORE_APP = SCORE_APP || {};
 		init : function() {
 			routie({
 
-			    'schedule': function() {
+			    'schedule': function() { //methode van het object SCORE_APP.routing
 			    	SCORE_APP.pages.showSchedulePage();
 			    },
 
@@ -24,9 +24,9 @@ var SCORE_APP = SCORE_APP || {};
 			});
 		}
 	}
-	// Hier worden de pagina's gegenereerd.
+	// Hier wordt de variabele content van de pagina's gegenereerd.
 	SCORE_APP.pages = {
-		showGamePage : function() {
+		showGamePage : function() { // Methode
 			SCORE_APP.pages.hideAllPages();
 			Transparency.render(document.getElementById('game-data'), SCORE_APP.data.game.tableData); //Render de data voor de corresponderende pagina
 			Transparency.render(document.getElementById('heading'), SCORE_APP.data.game.heading); //Render de heading voor de corresponderende pagina
@@ -46,13 +46,13 @@ var SCORE_APP = SCORE_APP || {};
 		},
 
 		hideAllPages : function() {
-			(document.getElementById('game')).style.display = 'none' ;
+			(document.getElementById('game')).style.display = 'none' ; // Verander de (inline) css naar display none
 			(document.getElementById('schedule')).style.display = 'none' ;
 			(document.getElementById('ranking')).style.display = 'none' ;
 		}
 	}
 
-	SCORE_APP.data = {
+	SCORE_APP.data = { //Hier wordt de (nu nog) statische data opgehaald.
 		game : {
 			heading : [
 				{ headingContent: "Pool A - Game" }
@@ -116,7 +116,11 @@ var SCORE_APP = SCORE_APP || {};
 		}
 	}
 
-	// Roep de benodigde objecten/functies aan
-	SCORE_APP.routing.init();
+	// DOM ready
+	domready(function () {
+		// Kickstart application
+		SCORE_APP.routing.init();
+		alert("werkt dit?");
+	});
 
 })();

@@ -7,14 +7,48 @@ body{
 
 }
 body > header{
-	background-color: rgba(100, 200, 100, 0.4);
+	/* background-color: rgba(100, 200, 100, 0.4); */
 	text-align: center;
+	width: 50%;
+	margin: 0 auto;
+	padding: 1%;
 }
 body > header h1{
 	font-size: 100%
+;
+	text-transform: uppercase;
+	font-size: 1.9em;
 }
 body > header h1 span{
 	font-size: 80%
+}
+
+nav a {
+    
+}
+
+nav a:hover {
+    
+}
+
+nav a:active {
+    
+}
+
+a {
+    text-decoration: none;
+    
+    color: #333;
+    font-size: 1.3em;
+    font-weight: 190bold;
+}
+
+a:hover {
+    
+}
+
+a:active {
+    
 }
 
 /* Menu */
