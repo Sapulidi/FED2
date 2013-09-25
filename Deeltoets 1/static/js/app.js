@@ -120,7 +120,6 @@ var SCORE_APP = SCORE_APP || {};
 	domready(function () {
 		// Kickstart application
 		SCORE_APP.routing.init();
-		alert("werkt dit?");
 	});
 
 })();
