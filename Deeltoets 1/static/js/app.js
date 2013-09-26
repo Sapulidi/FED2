@@ -1,47 +1,47 @@
 
-// Namespace voor de score app. Als de SCORE_APP nog niet bestaat maak 'm aan.
-var SCORE_APP = SCORE_APP || {};
+// Namespace voor de score app. Als de FED_APP nog niet bestaat maak 'm aan.
+var FED_APP = FED_APP || {};
 
 (function () { // Dit is een self-invoking function. D.w.z:
 	// De routing zorgt ervoor dat als er op een link wordt geklikt de data wordt getoond die bij de link hoort. Het template wordt later in de code
 	// gemaakt met transparency.
-	SCORE_APP.routing = {
+	FED_APP.routing = {
 		init : function() {
 			routie({
 
-			    'schedule': function() { //methode van het object SCORE_APP.routing
-			    	SCORE_APP.pages.showSchedulePage();
+			    'schedule': function() { //methode van het object FED_APP.routing
+			    	FED_APP.pages.showSchedulePage();
 			    },
 
 			    'ranking': function() {
-			    	SCORE_APP.pages.showRankingPage();
+			    	FED_APP.pages.showRankingPage();
 			    },
 
 			    'game, *' : function () { //Als geen toevoeging: laat de game page zien
-			    	SCORE_APP.pages.showGamePage();
+			    	FED_APP.pages.showGamePage();
 			    }
 
 			});
 		}
 	}
 	// Hier wordt de variabele content van de pagina's gegenereerd.
-	SCORE_APP.pages = {
+	FED_APP.pages = {
 		showGamePage : function() { // Methode
-			SCORE_APP.pages.hideAllPages();
-			Transparency.render(document.getElementById('game-data'), SCORE_APP.data.game.tableData); //Render de data voor de corresponderende pagina
-			Transparency.render(document.getElementById('heading'), SCORE_APP.data.game.heading); //Render de heading voor de corresponderende pagina
+			FED_APP.pages.hideAllPages();
+			Transparency.render(document.getElementById('game-data'), FED_APP.data.game.tableData); //Render de data voor de corresponderende pagina
+			Transparency.render(document.getElementById('heading'), FED_APP.data.game.heading); //Render de heading voor de corresponderende pagina
 			(document.getElementById('game')).style.display = 'block' ; // Zet de display (css, inline) naar block om de 
 		},
 		showSchedulePage : function() {
-			SCORE_APP.pages.hideAllPages();
-			Transparency.render(document.getElementById('schedule-data'), SCORE_APP.data.schedule.tableData);
-			Transparency.render(document.getElementById('heading'), SCORE_APP.data.schedule.heading);
+			FED_APP.pages.hideAllPages();
+			Transparency.render(document.getElementById('schedule-data'), FED_APP.data.schedule.tableData);
+			Transparency.render(document.getElementById('heading'), FED_APP.data.schedule.heading);
 			(document.getElementById('schedule')).style.display = 'block' ;
 		},
 		showRankingPage : function() {
-			SCORE_APP.pages.hideAllPages();
-			Transparency.render(document.getElementById('ranking-data'), SCORE_APP.data.ranking.tableData);
-			Transparency.render(document.getElementById('heading'), SCORE_APP.data.ranking.heading);
+			FED_APP.pages.hideAllPages();
+			Transparency.render(document.getElementById('ranking-data'), FED_APP.data.ranking.tableData);
+			Transparency.render(document.getElementById('heading'), FED_APP.data.ranking.heading);
 			(document.getElementById('ranking')).style.display = 'block' ;
 		},
 
@@ -52,7 +52,7 @@ var SCORE_APP = SCORE_APP || {};
 		}
 	}
 
-	SCORE_APP.data = { //Hier wordt de (nu nog) statische data opgehaald.
+	FED_APP.data = { //Hier wordt de (nu nog) statische data opgehaald.
 		game : {
 			heading : [
 				{ headingContent: "Pool A - Game" }
@@ -119,7 +119,7 @@ var SCORE_APP = SCORE_APP || {};
 	// DOM ready
 	domready(function () {
 		// Kickstart application
-		SCORE_APP.routing.init();
+		FED_APP.routing.init();
 	});
 
 })();
