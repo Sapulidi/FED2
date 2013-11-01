@@ -12,89 +12,98 @@
 		<h1><span>Tournament: </span>Amsterdam Ultimate Autumn</h1>
 	</header>
         <nav>
-            <ol>
-                <li><a href="#game">game</a></li>
+            <ul>
 				<li><a href="#schedule">schedule</a></li>
 				<li><a href="#ranking">ranking</a></li>
-			</ol>
+				<li><a href="#updategame/127162">Update game page</a></li>
+			</ul>
         </nav>
 
-        <section>
-            <header id="heading"><h1 data-bind="headingContent"></h1></header>
-            <table id="game">
-            	<thead>
-            		<tr>
-	            		<th>Score</th>
-	                    <th>Team</th>
-	                    <th>Points</th>
-	                    <th>Team</th>
-	                    <th>Points</th>
-                	</tr>
-            	</thead>
-            	<tbody id="game-data">
-					<tr>
-						<td data-bind="score"></td>
-						<td data-bind="team1"></td>
-						<td data-bind="team1Score"></td>
-						<td data-bind="team2"></td>
-						<td data-bind="team2Score"></td>
-					</tr>
-            	</tbody>
-            </table>
+        	<section id="updateGame">
+        		<form method="post" onSubmit="FED_APP.post.gameScore();return false;">
+        			<input type="hidden" id="game_id" data-bind="id">
+        			<label><input id ="team_1_score" type="text" data-bind="team_1_score" placeholder="11 (statisch)"></label>
+        			<label><input id ="team_2_score" type="text" data-bind="team_2_score" placeholder="12 (statisch)"></label>
+        			<input type="submit">
+        		</form>
+        	</section>
 
-            <table id="schedule">
-            	<thead>
-            		<tr>
-	            		<th>ate</th>
-	                    <th>Team</th>
-	                    <th>Points</th>
-	                    <th>Team</th>
-	                    <th>Points</th>
-                	</tr>
-            	</thead>
-            	<tbody id="schedule-data">
-					<tr>
-						<td data-bind="date"></td>
-						<td data-bind="team1"></td>
-						<td data-bind="team1ate"></td>
-						<td data-bind="team2"></td>
-						<td data-bind="team2Score"></td>
-					</tr>
-            	</tbody>
-            </table>
+           <section id="scheduleData">
+           		<h1 data-bind="name"></h1>
+				<table>
+					<thead>
+						<tr>
+							<th>Datum</th>
+							<th>Team 1</th>
+							<th>Result</th>
+							<th>Team 2</th>
+							<th>Update</th>
+						</tr>
+					</thead>
 
-            <table id="ranking">
-            	<thead>
-            		<tr>
-	            		<th>Win</th>
-	                    <th>Lost</th>
-	                    <th>Sw</th>
-	                    <th>Sl</th>
-	                    <th>Pl</th>
-                	</tr>
-            	</thead>
-            	
-            	<tbody id="ranking-data">
-					<tr>
-						<td data-bind="team"></td>
-						<td data-bind="Win"></td>
-						<td data-bind="Lost"></td>
-						<td data-bind="Sw"></td>
-						<td data-bind="Sl"></td>
-						<td data-bind="Pl"></td>
-					</tr>
-            	</tbody>
-            </table>
+					<tbody data-bind="schedule" id="scheduleTable">
+						<tr>
+							<td data-bind="start_time"></td>
+
+							<td data-bind="team_1">
+								<span data-bind="name"></span>
+							</td>
+
+							<td>
+								<span data-bind="team_1_score"></span>
+								 - 
+								<span data-bind="team_2_score"></span>
+							</td>
+
+							<td data-bind="team_2">
+								<span data-bind="name"></td>
+							</td>
+							
+							<td><a href="" data-bind="id">Update</a></td>
+						</tr>
+
+					</tbody>
+				</table>
+            </section>
+
+            <section id="rankingData">
+            	<h1 data-bind="name"></h1>
+	            <table id="ranking">
+	            	<thead>
+	            		<tr>
+		            		<th>Win</th>
+		                    <th>Lost</th>
+		                    <th>Sw</th>
+		                    <th>Sl</th>
+		                    <th>Pl</th>
+		                    <th>PM</th>
+	                	</tr>
+	            	</thead>
+	            	
+	            	<tbody data-bind="standings">
+						<tr>
+							<td data-bind="team">
+								<span data-bind="name"></span>
+							</td>
+							<td data-bind="wins"></td>
+							<td data-bind="losses"></td>
+							<td data-bind="points_scored"></td>
+							<td data-bind="points_allowed"></td>
+							<td data-bind="plus_minus"></td>
+						</tr>
+	            	</tbody>
+	            </table>
+           </section>
 
         </section>
 
 	<!-- Application -->
+	<script src="static/js/promise.min.js"></script>
 	<script src="static/js/ready.min.js"></script>
 	<script src="static/js/transparency.min.js"></script>
 	<script src="static/js/routie.min.js"></script>
+	<script src="static/js/date.js"></script>
 	<script src="static/js/app.js"></script>
-	
-	
 	
 </body>
 </html>

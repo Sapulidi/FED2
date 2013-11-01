@@ -5,121 +5,183 @@ var FED_APP = FED_APP || {};
 (function () { // Dit is een self-invoking function. D.w.z:
 	// De routing zorgt ervoor dat als er op een link wordt geklikt de data wordt getoond die bij de link hoort. Het template wordt later in de code
 	// gemaakt met transparency.
+	FED_APP.settings = {
+		scheduleDataUrl : "https://api.leaguevine.com/v1/games/?tournament_id=19389&pool_id=19219&access_token=740211582f",
+		poolDataUrl : "https://api.leaguevine.com/v1/pools/?tournament_id=19389&name=a&fields=%5Bname%2C%20standings%5D&access_token=07045a371c",
+		gameScoreUrl : "https://api.leaguevine.com/v1/games/"
+	}
+	// Als de dom ready is wordt de init methode binnen heb routing object aangeroepen
+	FED_APP.init = function (){
+		FED_APP.routing.init();
+	}
+
+	// Het post object
+	FED_APP.post = {
+		gameScore : function () {
+			// De data die meegestuurd wordt aan de post pagina. Zo worden de huidige scores aangegeven.
+			// Deze data heeft promise nodig om te posten (url, data, headers)
+			var data = JSON.stringify({
+				    team_1_score: document.getElementById('team_1_score').value,
+				    team_2_score: document.getElementById('team_2_score').value,
+				    is_final: 'True',
+				    game_id: document.getElementById('game_id').value
+				});
+				// De url waar naartoe gepost wordt en de informatie opgehaald kan worden.
+			var url = "https://api.leaguevine.com/v1/game_scores/";
+				// De headers voor de Leaguevine API
+			var headers = {
+				'Content-type':'application/json',
+				'Accept' : 'application/json',
+				'Authorization':'bearer 35ac044018'
+			};
+			// Promise doet de post van de url, data en headers.
+			promise.post(url, data, headers).then(function(error, text, xhr) {
+			    if (error) {
+			        alert('Error ' + xhr.status);
+			        return;
+			    }
+			});
+		}
+	}
+	// Het routing object (routie)
 	FED_APP.routing = {
 		init : function() {
 			routie({
 
-			    'schedule': function() { //methode van het object FED_APP.routing
+			    'schedule': function() { // Als routie 'schedule' in de url tegen komt wordt showSchedulPage() aangeroepen
 			    	FED_APP.pages.showSchedulePage();
 			    },
 
-			    'ranking': function() {
-			    	FED_APP.pages.showRankingPage();
+				'updategame/:id': function(id) { 	// Als routie 'updategame/:id' in de url tegen komt wordt showUpdateGamePage() aangeroepen
+													// en de id van de game meegestuurd.
+			    	FED_APP.pages.showUpdateGamePage(id);
 			    },
 
-			    'game, *' : function () { //Als geen toevoeging: laat de game page zien
-			    	FED_APP.pages.showGamePage();
+			    'ranking, *': function() { 	// Als routie 'ranking' in de url tegen komt wordt showrankingpage aangeroepen. Als er niets in de
+			    							// url staat wordt deze functie ook aangeroepen.
+			    	FED_APP.pages.showRankingPage();
 			    }
 
 			});
 		}
 	}
+
 	// Hier wordt de variabele content van de pagina's gegenereerd.
 	FED_APP.pages = {
-		showGamePage : function() { // Methode
-			FED_APP.pages.hideAllPages();
-			Transparency.render(document.getElementById('game-data'), FED_APP.data.game.tableData); //Render de data voor de corresponderende pagina
-			Transparency.render(document.getElementById('heading'), FED_APP.data.game.heading); //Render de heading voor de corresponderende pagina
-			(document.getElementById('game')).style.display = 'block' ; // Zet de display (css, inline) naar block om de 
-		},
 		showSchedulePage : function() {
 			FED_APP.pages.hideAllPages();
-			Transparency.render(document.getElementById('schedule-data'), FED_APP.data.schedule.tableData);
-			Transparency.render(document.getElementById('heading'), FED_APP.data.schedule.heading);
-			(document.getElementById('schedule')).style.display = 'block' ;
+
+			FED_APP.data.getScheduleData( function(scheduleData) {
+				(document.getElementById('scheduleData')).style.display = 'block' ;
+
+				var directives = {
+					id: {
+						text: function(params){
+							return "Update score"
+						},
+						href: function(params) {
+							return "#updateGame/" + this.id;
+						}
+					},
+
+					start_time: {
+						text: function(params){
+							return new Date(this.start_time).toString("dddd d MMMM HH:mm"); 
+						}
+					}
+				};
+
+				Transparency.render(document.getElementById('scheduleTable'), scheduleData, directives);
+			});
+
 		},
+		
 		showRankingPage : function() {
-			FED_APP.pages.hideAllPages();
-			Transparency.render(document.getElementById('ranking-data'), FED_APP.data.ranking.tableData);
-			Transparency.render(document.getElementById('heading'), FED_APP.data.ranking.heading);
-			(document.getElementById('ranking')).style.display = 'block' ;
+			FED_APP.pages.hideAllPages();	
+
+			FED_APP.data.getGameData( function(rankingData) {
+				(document.getElementById('rankingData')).style.display = 'block' ;
+				Transparency.render(document.getElementById('rankingData'), rankingData);
+			});
+		},
+
+		showUpdateGamePage : function(id) {
+			FED_APP.pages.hideAllPages();	
+
+			FED_APP.data.getGameScore( id, function(gameScore) {
+				(document.getElementById('updateGame')).style.display = 'block' ;
+				Transparency.render(document.getElementById('updateGame'), gameScore);
+			});
+				
 		},
 
 		hideAllPages : function() {
-			(document.getElementById('game')).style.display = 'none' ; // Verander de (inline) css naar display none
-			(document.getElementById('schedule')).style.display = 'none' ;
-			(document.getElementById('ranking')).style.display = 'none' ;
+			(document.getElementById('scheduleData')).style.display = 'none' ; // Verander de (inline) css naar display none
+			(document.getElementById('rankingData')).style.display = 'none' ;
+			(document.getElementById('updateGame')).style.display = 'none' ;
 		}
 	}
 
 	FED_APP.data = { //Hier wordt de (nu nog) statische data opgehaald.
-		game : {
-			heading : [
-				{ headingContent: "Pool A - Game" }
-				],
-			tableData :	[
-			    { score: "1", team1: "Boomsquad", team1Score: "1", team2: "Burning Snow", team2Score: "0"},
-			    { score: "2", team1: "Boomsquad", team1Score: "2", team2: "Burning Snow", team2Score: "0"},
-			    { score: "3", team1: "Boomsquad", team1Score: "2", team2: "Burning Snow", team2Score: "1"},
-			    { score: "4", team1: "Boomsquad", team1Score: "2", team2: "Burning Snow", team2Score: "2"},
-			    { score: "5", team1: "Boomsquad", team1Score: "3", team2: "Burning Snow", team2Score: "2"},
-			    { score: "6", team1: "Boomsquad", team1Score: "4", team2: "Burning Snow", team2Score: "2"},
-			    { score: "7", team1: "Boomsquad", team1Score: "5", team2: "Burning Snow", team2Score: "2"},
-			    { score: "8", team1: "Boomsquad", team1Score: "5", team2: "Burning Snow", team2Score: "3"},
-			    { score: "9", team1: "Boomsquad", team1Score: "6", team2: "Burning Snow", team2Score: "3"},
-			    { score: "10", team1: "Boomsquad", team1Score: "7", team2: "Burning Snow", team2Score: "3"},
-			    { score: "11", team1: "Boomsquad", team1Score: "7", team2: "Burning Snow", team2Score: "4"},
-			    { score: "12", team1: "Boomsquad", team1Score: "8", team2: "Burning Snow", team2Score: "4"},
-			    { score: "13", team1: "Boomsquad", team1Score: "8", team2: "Burning Snow", team2Score: "5"},
-			    { score: "14", team1: "Boomsquad", team1Score: "8", team2: "Burning Snow", team2Score: "6"},
-			    { score: "15", team1: "Boomsquad", team1Score: "9", team2: "Burning Snow", team2Score: "6"},
-			    { score: "16", team1: "Boomsquad", team1Score: "9", team2: "Burning Snow", team2Score: "7"},
-			    { score: "17", team1: "Boomsquad", team1Score: "10", team2: "Burning Snow", team2Score: "7"},
-			    { score: "18", team1: "Boomsquad", team1Score: "11", team2: "Burning Snow", team2Score: "7"},
-			    { score: "19", team1: "Boomsquad", team1Score: "12", team2: "Burning Snow", team2Score: "7"},
-			    { score: "20", team1: "Boomsquad", team1Score: "13", team2: "Burning Snow", team2Score: "7"},
-			    { score: "21", team1: "Boomsquad", team1Score: "14", team2: "Burning Snow", team2Score: "7"},
-			    { score: "22", team1: "Boomsquad", team1Score: "14", team2: "Burning Snow", team2Score: "8"},
-			    { score: "23", team1: "Boomsquad", team1Score: "15", team2: "Burning Snow", team2Score: "8"}
-			]
+		getGameData : function(callback){
+
+			promise.get(FED_APP.settings.poolDataUrl).then(function(error, text, xhr) {
+			    if (error) {
+			        alert('Error ' + xhr.status);
+			        return;
+			    }
+
+			    // in deze variabele staat alle informatie (een string) die we hebben teruggekregen van promise. Deze wordt hier
+			    // netjes omgetoverd tot object.
+			     var json = JSON.parse(text);
+
+			     json.objects;
+			     callback(json.objects[0]);
+
+			});
 		},
 
-	    schedule : {
-	    	heading:  [
-	    		{ headingContent: "Pool A - Schedule" }
-	    		],
-	    	tableData : [
-			    { date: "Monday, 9:00am", team1: "Chasing", team1Score: "13", team2: "Amsterdam Money Gang", team2Score: "9"},
-			    { date: "Monday, 9:00am", team1: "Boomsquad", team1Score: "15", team2: "Beast Amsterdam", team2Score: "11"},
-			    { date: "Monday, 10:00am", team1: "Beast Amsterdam", team1Score: "14", team2: "Amsterdam Money Gang", team2Score: "12"},
-			    { date: "Monday, 10:00am", team1: "Chasing", team1Score: "5", team2: "Burning Snow", team2Score: "15"},
-			    { date: "Monday, 11:00am", team1: "Boomsquad", team1Score: "11", team2: "Amsterdam Money Gang", team2Score: "15"},    
-			    { date: "Monday, 11:00am", team1: "Burning Snow", team1Score: "15", team2: "Beast Amsterdam", team2Score: "6"},
-			    { date: "Monday, 12:00pm", team1: "Chasing", team1Score: "8", team2: "Beast Amsterdam", team2Score: "15"},
-			    { date: "Monday, 12:00pm", team1: "Boomsquad", team1Score: "15", team2: "Burning Snow", team2Score: "8"},
-			    { date: "Monday, 1:00pm", team1: "Chasing", team1Score: "15", team2: "Boomsquad", team2Score: "14"},
-			    { date: "Monday, 1:00pm", team1: "Burning Snow", team1Score: "15", team2: "Amsterdam Money Gang", team2Score: "11"}
-		    ]
+		getScheduleData : function(callback){
+
+			promise.get(FED_APP.settings.scheduleDataUrl).then(function(error, text, xhr) {
+			    if (error) {
+			        alert('Error ' + xhr.status);
+			        return;
+			    }
+
+			    // in deze variabele staat alle informatie (een string) die we hebben teruggekregen van promise. Deze wordt hier
+			    // netjes omgetoverd tot object.
+			     var json = JSON.parse(text);
+
+			     json.objects;
+			     callback(json.objects);
+
+			});
 		},
 
-		ranking : {
-			heading:  [
-				{ headingContent: "Pool A - Ranking" }
-				],
-			tableData : [
-			    { team: "Chasing", Win: "2", Lost: "2", Sw: "7", Sl: "9", Pw: "35", Pl: "39"},
-			    { team: "Boomsquad", Win: "2", Lost: "2", Sw: "9", Sl: "8", Pw: "36", Pl: "34"},
-			    { team: "Burning Snow", Win: "3", Lost: "1", Sw: "11", Sl: "4", Pw: "36", Pl: "23"},
-			    { team: "Beast Amsterdam", Win: "2", Lost: "2", Sw: "6", Sl: "8", Pw: "30", Pl: "34"},
-			    { team: "Amsterdam Money Gang", Win: "1", Lost: "3", Sw: "6", Sl: "10", Pw: "30", Pl: "37"}
-		    ]
-		}
+		getGameScore : function(id, callback){
+
+			promise.get(FED_APP.settings.gameScoreUrl + id + '/').then(function(error, text, xhr) {
+			    if (error) {
+			        alert('Error ' + xhr.status);
+			        return;
+			    }
+
+			    // in deze variabele staat alle informatie (een string) die we hebben teruggekregen van promise. Deze wordt hier
+			    // netjes omgetoverd tot object.
+			     var json = JSON.parse(text);
+
+			     json.objects;
+			     callback(json);
+			});
+		},
+		
 	}
 
 	// DOM ready
 	domready(function () {
 		// Kickstart application
-		FED_APP.routing.init();
+		FED_APP.init();
 	});
 
 })();
