@@ -13,6 +13,9 @@ var FED_APP = FED_APP || {};
 	// Als de dom ready is wordt de init methode binnen heb routing object aangeroepen
 	FED_APP.init = function (){
 		FED_APP.routing.init();
+		FED_APP.gestures.registerSwipeLeft();
+		FED_APP.gestures.registerSwipeRight();
+
 	}
 
 	// Het post object
@@ -39,6 +42,8 @@ var FED_APP = FED_APP || {};
 			    if (error) {
 			        alert('Error ' + xhr.status);
 			        return;
+			    } else {
+			    	document.location.href = '#schedule';
 			    }
 			});
 		}
@@ -53,7 +58,7 @@ var FED_APP = FED_APP || {};
 			    },
 
 				'updategame/:id': function(id) { 	// Als routie 'updategame/:id' in de url tegen komt wordt showUpdateGamePage() aangeroepen
-													// en de id van de game meegestuurd.
+												// en de id van de game meegestuurd.
 			    	FED_APP.pages.showUpdateGamePage(id);
 			    },
 
@@ -63,6 +68,30 @@ var FED_APP = FED_APP || {};
 			    }
 
 			});
+		}
+	}
+
+	FED_APP.gestures = {
+		registerSwipeLeft : function (){
+			var element = document.getElementById('body');
+    		var hammertime = Hammer(element).on("dragleft", function(event) {
+    			FED_APP.pages.showSchedulePage();
+    		});
+		},
+		registerSwipeRight : function (){
+			var element = document.getElementById('body');
+    		var hammertime = Hammer(element).on("dragright", function(event) {
+    			FED_APP.pages.showRankingPage();
+    		});
+		}
+	}
+
+	FED_APP.loader = {
+		show : function (){
+			(document.getElementById('loader')).style.display = 'block' ;
+		},
+		hide : function (){
+			(document.getElementById('loader')).style.display = 'none' ;
 		}
 	}
 
@@ -76,23 +105,25 @@ var FED_APP = FED_APP || {};
 
 				var directives = {
 					id: {
-						text: function(params){
-							return "Update score"
+						text: function(){
+							return ""
 						},
-						href: function(params) {
+						href: function() {
 							return "#updateGame/" + this.id;
 						}
 					},
 
 					start_time: {
-						text: function(params){
-							return new Date(this.start_time).toString("dddd d MMMM HH:mm"); 
+						text: function(){
+							return new Date(this.start_time).toString(" d MMM HH:mm"); 
 						}
 					}
 				};
 
 				Transparency.render(document.getElementById('scheduleTable'), scheduleData, directives);
+				FED_APP.loader.hide();
 			});
+
 
 		},
 		
@@ -102,6 +133,7 @@ var FED_APP = FED_APP || {};
 			FED_APP.data.getGameData( function(rankingData) {
 				(document.getElementById('rankingData')).style.display = 'block' ;
 				Transparency.render(document.getElementById('rankingData'), rankingData);
+				FED_APP.loader.hide();
 			});
 		},
 
@@ -111,8 +143,8 @@ var FED_APP = FED_APP || {};
 			FED_APP.data.getGameScore( id, function(gameScore) {
 				(document.getElementById('updateGame')).style.display = 'block' ;
 				Transparency.render(document.getElementById('updateGame'), gameScore);
+				FED_APP.loader.hide();
 			});
-				
 		},
 
 		hideAllPages : function() {
@@ -139,6 +171,7 @@ var FED_APP = FED_APP || {};
 			     callback(json.objects[0]);
 
 			});
+			FED_APP.loader.show();
 		},
 
 		getScheduleData : function(callback){
@@ -155,8 +188,8 @@ var FED_APP = FED_APP || {};
 
 			     json.objects;
 			     callback(json.objects);
-
 			});
+			FED_APP.loader.show();
 		},
 
 		getGameScore : function(id, callback){
@@ -174,8 +207,8 @@ var FED_APP = FED_APP || {};
 			     json.objects;
 			     callback(json);
 			});
+			FED_APP.loader.show();
 		},
-		
 	}
 
 	// DOM ready

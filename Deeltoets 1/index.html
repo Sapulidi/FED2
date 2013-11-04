@@ -6,25 +6,29 @@
 	<title>Web App Skeleton v 0.3</title>
 	<link href="static/css/style.css" rel="stylesheet" type="text/css" />
 </head>
-<body>
+<body id="body">
 	
 	<header>
-		<h1><span>Tournament: </span>Amsterdam Ultimate Autumn</h1>
+		<h1>Amsterdam Ultimate Autumn</h1>
 	</header>
         <nav>
             <ul>
 				<li><a href="#schedule">schedule</a></li>
 				<li><a href="#ranking">ranking</a></li>
-				<li><a href="#updategame/127162">Update game page</a></li>
+				<!--<li><a href="#updategame/127162">Update game page</a></li>-->
 			</ul>
         </nav>
 
         	<section id="updateGame">
         		<form method="post" onSubmit="FED_APP.post.gameScore();return false;">
         			<input type="hidden" id="game_id" data-bind="id">
-        			<label><input id ="team_1_score" type="text" data-bind="team_1_score" placeholder="11 (statisch)"></label>
-        			<label><input id ="team_2_score" type="text" data-bind="team_2_score" placeholder="12 (statisch)"></label>
-        			<input type="submit">
+        			<label>
+        				<h1 data-bind="team_1"><span data-bind="name"></span></h1>
+        				<input id ="team_1_score" type="text" data-bind="team_1_score" placeholder="11 (statisch)"></label>
+        			<label>
+        				<h1 data-bind="team_2"><span data-bind="name"></span></h1>
+        				<input id ="team_2_score" type="text" data-bind="team_2_score" placeholder="12 (statisch)"></label>
+        			<input type="submit" value="Update score">
         		</form>
         	</section>
 
@@ -37,7 +41,7 @@
 							<th>Team 1</th>
 							<th>Result</th>
 							<th>Team 2</th>
-							<th>Update</th>
+							<th></th>
 						</tr>
 					</thead>
 
@@ -59,7 +63,7 @@
 								<span data-bind="name"></td>
 							</td>
 							
-							<td><a href="" data-bind="id">Update</a></td>
+							<td><span class="button"><a href="" data-bind="id"><img src="static/img/update.png" alt="update"></a></span></td>
 						</tr>
 
 					</tbody>
@@ -95,10 +99,15 @@
 	            </table>
            </section>
 
+           <section id="loader">
+           	<img src="static/img/ajax-loader.gif" alt="loading">
+           </section>
+
         </section>
 
 	<!-- Application -->
 	<script src="static/js/promise.min.js"></script>
+	<script src="static/js/hammer.min.js"></script>
 	<script src="static/js/ready.min.js"></script>
 	<script src="static/js/transparency.min.js"></script>
 	<script src="static/js/routie.min.js"></script>
