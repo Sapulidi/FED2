@@ -15,8 +15,7 @@ var FED_APP = FED_APP || {};
 		FED_APP.routing.init();
 		FED_APP.gestures.registerSwipeLeft();
 		FED_APP.gestures.registerSwipeRight();
-
-	}
+	}  
 
 	// Het post object
 	FED_APP.post = {
