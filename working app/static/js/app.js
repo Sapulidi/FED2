@@ -85,38 +85,12 @@ var FED_APP = FED_APP || {};
 		}
 	}
 
-	FED_APP.toggle = {
-		showHide : function (elementId, show){
-			var e = document.getElementById(elementId);
-
-			if (show) {
-				e.className = e.className.replace('', 'show ');
-			} else {
-				e.className = e.className.replace('show ', '');
-			}
-		}
-
-		// !!!!!! nu nog een fix vinden om de initial states van elementen te fixen (omdat inline css nu niet aanwezig in de css).
-
-		isSelected : function (elementId, selected){
-			// opzetje voor de is-selected addClass functie voor menuitems
-			var e = document.getElementById(elementId);
-
-			if(selected) {
-				//
-			} else {
-				//
-			}
-		}
-	}
-
 	FED_APP.loader = {
-
 		show : function (){
-			FED_APP.toggle.showHide('loader', true);
+			(document.getElementById('loader')).style.display = 'block' ;
 		},
 		hide : function (){
-			FED_APP.toggle.showHide('loader', false);
+			(document.getElementById('loader')).style.display = 'none' ;
 		}
 	}
 

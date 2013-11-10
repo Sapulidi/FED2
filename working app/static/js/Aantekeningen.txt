@@ -1,0 +1,27 @@
+WEB APP skeleton
+
+3 pagina's, single page application. 
+- Namespace
+- application/controller object
+- aantal microlibs (router, om verschillende pagina's van je app te kunnen navigeren).
+- Template systeem (Gaat nico zometeen uitleggen).
+
+De content komt uit een data-object mbv een template engine (javascript) wordt deze gerendered.
+
+index.html:
+Header: daar staat de nav met 3 knopjes.
+Article: hierin staan 3 sections. De sections komen or vereen met de pagina's die in je app staan. (page 1, 2, 3).
+Een route is hetzelfde als de app_dev bij oberon. huppeldepup.php?=home.
+
+Waar bestaat de app uit:
+
+- game
+- schedule
+- ranking
+
+de #ranking gaat de data laden van corresponderende pagina. 
+We willen de app in onze eigen namespace maken ( SCOREAPP ). Welke functionaliteiten?
+- routen (dat is een functionaliteit die je zou moeten hebben)
+- laden van de data
+- templating (in die template daar zit  het binden van data, laden van data etc. etc.).
+- 
