@@ -5,18 +5,20 @@
 
 	<title>Web App Skeleton v 0.3</title>
 	<link href="static/css/style.css" rel="stylesheet" type="text/css" />
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
 </head>
 <body id="body">
 	
 	<header>
 		<h1>Amsterdam Ultimate Autumn</h1>
+		<nav>
+	        <ul>
+				<li class="left"><a id="j-scheduleanchor" href="#schedule">schedule</a></li>
+				<li class="right"><a id="j-rankinganchor" href="#ranking">ranking</a></li>
+			</ul>
+   		 </nav>
 	</header>
-    <nav>
-        <ul>
-			<li><a id="j-scheduleanchor" href="#schedule">schedule</a></li>
-			<li><a id="j-rankinganchor" href="#ranking">ranking</a></li>
-		</ul>
-    </nav>
+    
 
 	<section id="j-updateGame" class="updategame">
 		<form method="post" onSubmit="FED_APP.post.gameScore();return false;">
@@ -38,19 +40,22 @@
 				<div class="time">
 					<span data-bind="start_time"></span>
 				</div>
-				<div class="team">
-					<span class="team-name" data-bind="team_1">
-						<span data-bind="name"></span>
-					</span>
-					<span class="team-score" data-bind="team_1_score"></span>
+				<a href="" data-bind="id"><span>Wijzig score</span></a>
+				<div class="teams">
+					<div class="team">
+						<span class="team-name" data-bind="team_1">
+							<span data-bind="name"></span>
+						</span>
+						<span class="team-score" data-bind="team_1_score"></span>
+					</div>
+					<div class="team">
+						<span class="team-name" data-bind="team_2">
+							<span data-bind="name"></span>
+						</span>
+						<span class="team-score" data-bind="team_2_score"></span>
+					</div>
 				</div>
-				<div class="team">
-					<span class="team-name" data-bind="team_2">
-						<span data-bind="name"></span>
-					</span>
-					<span class="team-score" data-bind="team_2_score"></span>
-				</div>
-			<span class="button"><a href="" data-bind="id"><img src="static/img/update.png" alt="update"></a></span>
+			</div>
     </section>
 
     <section id="j-rankingData" class="rankingdata">
@@ -82,9 +87,15 @@
         </table>
    </section>
 
-<section id="j-loader" class="loader">
-	<img src="static/img/ajax-loader.gif" alt="loading">
-</section>
+	<div id="j-loader" class="loading">
+		<div class="loading-wrapper">
+			<div id="pong">
+				<div class="pad"></div>
+				<div class="ball"></div>
+				<div class="pad"></div>
+			</div>
+		</div>
+	</div>
 
 
 	<!-- Application -->
