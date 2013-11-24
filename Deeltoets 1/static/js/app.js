@@ -3,6 +3,7 @@
 var FED_APP = FED_APP || {};
 
 (function () { // Dit is een self-invoking function. D.w.z:
+	
 	// De routing zorgt ervoor dat als er op een link wordt geklikt de data wordt getoond die bij de link hoort. Het template wordt later in de code
 	// gemaakt met transparency.
 	FED_APP.settings = {
@@ -10,115 +11,32 @@ var FED_APP = FED_APP || {};
 		poolDataUrl : "https://api.leaguevine.com/v1/pools/?tournament_id=19389&name=a&fields=%5Bname%2C%20standings%5D&access_token=07045a371c",
 		gameScoreUrl : "https://api.leaguevine.com/v1/games/"
 	}
+
 	// Als de dom ready is wordt de init methode binnen heb routing object aangeroepen
 	FED_APP.init = function (){
 		FED_APP.routing.init();
-		//FED_APP.gestures.registerSwipeLeft();
-		//FED_APP.gestures.registerSwipeRight();
+		FED_APP.gestures.registerSwipeLeft();
+		FED_APP.gestures.registerSwipeRight();
 	}  
-
-	// Het post object
-	FED_APP.post = {
-		gameScore : function () {
-			// De data die meegestuurd wordt aan de post pagina. Zo worden de huidige scores aangegeven.
-			// Deze data heeft promise nodig om te posten (url, data, headers)
-			var data = JSON.stringify({
-				    team_1_score: document.getElementById('team_1_score').value,
-				    team_2_score: document.getElementById('team_2_score').value,
-				    is_final: 'True',
-				    game_id: document.getElementById('game_id').value
-				});
-				// De url waar naartoe gepost wordt en de informatie opgehaald kan worden.
-			var url = "https://api.leaguevine.com/v1/game_scores/";
-				// De headers voor de Leaguevine API
-			var headers = {
-				'Content-type':'application/json',
-				'Accept' : 'application/json',
-				'Authorization':'bearer 35ac044018'
-			};
-			// Promise doet de post van de url, data en headers.
-			promise.post(url, data, headers).then(function(error, text, xhr) {
-			    if (error) {
-			        alert('Error ' + xhr.status);
-			        return;
-			    } else {
-			    	document.location.href = '#schedule';
-			    }
-			});
-		}
-	}
+	
 	// Het routing object (routie)
 	FED_APP.routing = {
 		init : function() {
 			routie({
-
 			    'schedule': function() { // Als routie 'schedule' in de url tegen komt wordt showSchedulPage() aangeroepen
 			    	FED_APP.pages.showSchedulePage();
-			    	FED_APP.toggle.isSelected('j-scheduleanchor', true);
-			    	FED_APP.toggle.isSelected('j-rankinganchor', false);
+			    	
 			    },
-
 				'updategame/:id': function(id) { 	// Als routie 'updategame/:id' in de url tegen komt wordt showUpdateGamePage() aangeroepen
 												// en de id van de game meegestuurd.
 			    	FED_APP.pages.showUpdateGamePage(id);
 			    },
-
 			    'ranking, *': function() { 	// Als routie 'ranking' in de url tegen komt wordt showrankingpage aangeroepen. Als er niets in de
 			    							// url staat wordt deze functie ook aangeroepen.
 			    	FED_APP.pages.showRankingPage();
-			    	FED_APP.toggle.isSelected('j-rankinganchor', true);
-			    	FED_APP.toggle.isSelected('j-scheduleanchor', false);
+			    	
 			    }
-
 			});
-		}
-	}
-
-	FED_APP.gestures = {
-		registerSwipeLeft : function (){
-			var element = document.getElementById('body');
-   		var hammertime = Hammer(element).on("dragleft", function(event) {
-    			FED_APP.pages.showSchedulePage();
-    		});
-		},
-		registerSwipeRight : function (){
-			var element = document.getElementById('body');
-    		var hammertime = Hammer(element).on("dragright", function(event) {
-    			FED_APP.pages.showRankingPage();
-    		});
-		}
-	}
-
-	FED_APP.toggle = {
-		showHide : function (elementId, show){
-			var e = document.getElementById(elementId);
-
-			if (show) {
-				e.className = e.className.replace('', 'show ');
-			} else {
-				e.className = e.className.replace('show ', '');
-			}
-		},
-
-		isSelected : function (elementId, selected){
-			
-			var e = document.getElementById(elementId);
-
-			if(selected) {
-				e.className = e.className.replace('', 'is-selected ');
-			} else {
-				e.className = e.className.replace('is-selected ', '');
-			}
-		}
-	}
-
-	FED_APP.loader = {
-
-		show : function (){
-			FED_APP.toggle.showHide('j-loader', true);
-		},
-		hide : function (){
-			FED_APP.toggle.showHide('j-loader', false);
 		}
 	}
 
@@ -151,8 +69,10 @@ var FED_APP = FED_APP || {};
 				FED_APP.loader.hide();
 			});
 
+			FED_APP.toggle.isSelected('j-scheduleanchor', true);
+			FED_APP.toggle.isSelected('j-rankinganchor', false);
+
 		},
-		
 		showRankingPage : function() {
 			FED_APP.pages.hideAllPages();	
 
@@ -161,8 +81,9 @@ var FED_APP = FED_APP || {};
 				Transparency.render(document.getElementById('j-rankingData'), rankingData);
 				FED_APP.loader.hide();
 			});
+			FED_APP.toggle.isSelected('j-rankinganchor', true);
+			FED_APP.toggle.isSelected('j-scheduleanchor', false);
 		},
-
 		showUpdateGamePage : function(id) {
 			FED_APP.pages.hideAllPages();	
 
@@ -172,7 +93,6 @@ var FED_APP = FED_APP || {};
 				FED_APP.loader.hide();
 			});
 		},
-
 		hideAllPages : function() {
 			FED_APP.toggle.showHide('j-scheduleData', false);
 			FED_APP.toggle.showHide('j-rankingData', false);
@@ -185,7 +105,7 @@ var FED_APP = FED_APP || {};
 
 			promise.get(FED_APP.settings.poolDataUrl).then(function(error, text, xhr) {
 			    if (error) {
-			        alert('Error ' + xhr.status);
+			        alert('Oopsie, I broke again ' + xhr.status);
 			        return;
 			    }
 
@@ -199,12 +119,11 @@ var FED_APP = FED_APP || {};
 			});
 			FED_APP.loader.show();
 		},
-
 		getScheduleData : function(callback){
 
 			promise.get(FED_APP.settings.scheduleDataUrl).then(function(error, text, xhr) {
 			    if (error) {
-			        alert('Error ' + xhr.status);
+			        alert('Oopsie, I broke again ' + xhr.status);
 			        return;
 			    }
 
@@ -217,12 +136,11 @@ var FED_APP = FED_APP || {};
 			});
 			FED_APP.loader.show();
 		},
-
 		getGameScore : function(id, callback){
 
 			promise.get(FED_APP.settings.gameScoreUrl + id + '/').then(function(error, text, xhr) {
 			    if (error) {
-			        alert('Error ' + xhr.status);
+			        alert('Oopsie, I broke again ' + xhr.status);
 			        return;
 			    }
 
@@ -235,6 +153,86 @@ var FED_APP = FED_APP || {};
 			});
 			FED_APP.loader.show();
 		},
+	}
+
+	// Het post object
+	FED_APP.post = {
+		gameScore : function () {
+			// De data die meegestuurd wordt aan de post pagina. Zo worden de huidige scores aangegeven.
+			// Deze data heeft promise nodig om te posten (url, data, headers)
+			var data = JSON.stringify({
+				    team_1_score: document.getElementById('team_1_score').value,
+				    team_2_score: document.getElementById('team_2_score').value,
+				    is_final: 'True',
+				    game_id: document.getElementById('game_id').value
+				});
+				// De url waar naartoe gepost wordt en de informatie opgehaald kan worden.
+			var url = "https://api.leaguevine.com/v1/game_scores/";
+				// De headers voor de Leaguevine API
+			var headers = {
+				'Content-type':'application/json',
+				'Accept' : 'application/json',
+				'Authorization':'bearer 35ac044018'
+			};
+			// Promise doet de post van de url, data en headers.
+			promise.post(url, data, headers).then(function(error, text, xhr) {
+			    if (error) {
+			        alert('Error ' + xhr.status);
+			        return;
+			    } else {
+			    	document.location.href = '#schedule';
+			    }
+			});
+		}
+	}
+
+	FED_APP.gestures = {
+		registerSwipeLeft : function (){
+			var element = document.getElementById('body');
+   			var hammertime = Hammer(element).on("swipeleft", function(event) {
+   				event.preventDefault();
+    			FED_APP.pages.showSchedulePage();
+    		});
+		},
+		registerSwipeRight : function (){
+			var element = document.getElementById('body');
+    		var hammertime = Hammer(element).on("swiperight", function(event) {
+    			event.preventDefault();
+    			FED_APP.pages.showRankingPage();
+    		});
+		}
+	}
+
+	FED_APP.toggle = {
+		showHide : function (elementId, show){
+			var e = document.getElementById(elementId);
+
+			if (show) {
+				e.className = e.className.replace('', 'show ');
+			} else {
+				e.className = e.className.replace('show ', '');
+			}
+		},
+
+		isSelected : function (elementId, selected){
+			
+			var e = document.getElementById(elementId);
+
+			if(selected) {
+				e.className = e.className.replace('', 'is-selected ');
+			} else {
+				e.className = e.className.replace('is-selected ', '');
+			}
+		}
+	}
+
+	FED_APP.loader = {
+		show : function (){
+			FED_APP.toggle.showHide('j-loader', true);
+		},
+		hide : function (){
+			FED_APP.toggle.showHide('j-loader', false);
+		}
 	}
 
 	// DOM ready
