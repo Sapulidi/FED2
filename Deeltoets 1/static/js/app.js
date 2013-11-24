@@ -101,7 +101,7 @@ var FED_APP = FED_APP || {};
 		},
 
 		isSelected : function (elementId, selected){
-			// opzetje voor de is-selected addClass functie voor menuitems
+			
 			var e = document.getElementById(elementId);
 
 			if(selected) {
@@ -151,7 +151,6 @@ var FED_APP = FED_APP || {};
 				FED_APP.loader.hide();
 			});
 
-
 		},
 		
 		showRankingPage : function() {
@@ -181,7 +180,7 @@ var FED_APP = FED_APP || {};
 		}
 	}
 
-	FED_APP.data = { //Hier wordt de (nu nog) statische data opgehaald.
+	FED_APP.data = { 
 		getGameData : function(callback){
 
 			promise.get(FED_APP.settings.poolDataUrl).then(function(error, text, xhr) {

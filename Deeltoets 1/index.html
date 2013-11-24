@@ -3,7 +3,7 @@
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<title>Web App Skeleton v 0.3</title>
+	<title>Schorre app</title>
 	<link href="static/css/style.css" rel="stylesheet" type="text/css" />
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
 </head>
@@ -11,31 +11,43 @@
 	
 	<header>
 		<h1>Amsterdam Ultimate Autumn</h1>
+		
 		<nav>
 	        <ul>
-				<li class="left"><a id="j-scheduleanchor" href="#schedule">schedule</a></li>
-				<li class="right"><a id="j-rankinganchor" href="#ranking">ranking</a></li>
+				<li class="left"><a id="j-scheduleanchor" href="#schedule">rooster</a></li>
+				<li class="right"><a id="j-rankinganchor" href="#ranking">stand</a></li>
 			</ul>
    		 </nav>
 	</header>
-    
 
+	<div id="j-loader" class="loading">
+			<div id="circle-container">
+				<div class="quarter top-anim"></div>
+				<div class="quarter top-anim"></div>
+				<div class="quarter bottom-anim"></div>
+				<div class="quarter bottom-anim"></div>
+				<div class="full"></div>	
+			</div>
+		</div>
+    
 	<section id="j-updateGame" class="updategame">
-		<form method="post" onSubmit="FED_APP.post.gameScore();return false;">
-			<input type="hidden" id="game_id" data-bind="id">
-			<label>
-				<h1 data-bind="team_1"><span data-bind="name"></span></h1>
-				<input id ="team_1_score" type="text" data-bind="team_1_score" placeholder="11"></label>
-			<label>
-				<h1 data-bind="team_2"><span data-bind="name"></span></h1>
-				<input id ="team_2_score" type="text" data-bind="team_2_score" placeholder="12"></label>
-			<input type="submit" value="Update score">
-		</form>
+		<div class="game">
+			<form method="post" onSubmit="FED_APP.post.gameScore();return false;">
+				<input type="hidden" id="game_id" data-bind="id">
+				<label>
+					<h1 data-bind="team_1"><span data-bind="name"></span></h1>
+					<input id ="team_1_score" type="text" data-bind="team_1_score" placeholder="11"></label>
+				<label>
+					<h1 data-bind="team_2"><span data-bind="name"></span></h1>
+					<input id ="team_2_score" type="text" data-bind="team_2_score" placeholder="12"></label>
+				<input type="submit" value="Update score">
+			</form>
+		</div>
 	</section>
 
    <section id="j-scheduleData" class="scheduledata">
    		<h1 data-bind="name"></h1>
-		<div  id="j-scheduleTable">
+		<div id="j-scheduleTable">
 			<div class="game" data-bind="schedule">
 				<div class="time">
 					<span data-bind="start_time"></span>
@@ -58,44 +70,24 @@
 			</div>
     </section>
 
-    <section id="j-rankingData" class="rankingdata">
-    	<h1 data-bind="name"></h1>
-        <table id="ranking">
-        	<thead>
-        		<tr>
-            		<th>Win</th>
-                    <th>Lost</th>
-                    <th>Sw</th>
-                    <th>Sl</th>
-                    <th>Pl</th>
-                    <th>PM</th>
-            	</tr>
-        	</thead>
-        	
-        	<tbody data-bind="standings">
-				<tr>
-					<td data-bind="team">
+    <section id="j-rankingData" class="rankingdata">    
+		<div class="ranking" data-bind="standings">
+			<div class="game">
+				<div class="team">
+					<span class="team-name" data-bind="team">
 						<span data-bind="name"></span>
-					</td>
-					<td data-bind="wins"></td>
-					<td data-bind="losses"></td>
-					<td data-bind="points_scored"></td>
-					<td data-bind="points_allowed"></td>
-					<td data-bind="plus_minus"></td>
-				</tr>
-        	</tbody>
-        </table>
+					</span>
+				</team>
+				<div class="won">Gewonnen<span data-bind="wins"></span></div>
+				<div class="lost">Verloren<span data-bind="losses"></span></div>
+				<div class="points-scored">Aantal punten<span data-bind="points_scored"></span></div>
+				<div class="points-allowed">Benodigd<span data-bind="points_allowed"></span></div>
+				<div class="plus-minus">+/-<span data-bind="plus_minus"></span></div>
+			</div>
+    	</div>
    </section>
 
-	<div id="j-loader" class="loading">
-		<div class="loading-wrapper">
-			<div id="pong">
-				<div class="pad"></div>
-				<div class="ball"></div>
-				<div class="pad"></div>
-			</div>
-		</div>
-	</div>
+
 
 
 	<!-- Application -->
